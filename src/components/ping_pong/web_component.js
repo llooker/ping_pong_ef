@@ -1,15 +1,3 @@
-import React, { useCallback, useContext, useEffect } from "react"
-import { EmbedProps } from "./types"
-import { LookerEmbedSDK, LookerEmbedDashboard } from '@looker/embed-sdk'
-import {
-  ExtensionContext,
-  ExtensionContextData,
-} from "@looker/extension-sdk-react"
-import { Button, Heading, Label, ToggleSwitch } from "@looker/components"
-import { SandboxStatus } from '../SandboxStatus'
-import { EmbedContainer } from './components/EmbedContainer'
-
-
 class PingPong extends HTMLElement {
   constructor() {
     super();
@@ -805,68 +793,92 @@ class PingPong extends HTMLElement {
     await this.render(this.element);
   }
 }
+// if (!customElements.get("ping-pong")) {
+//   customElements.define("ping-pong", PingPong);
+// }
+// return f;
 
 
-
-
-export const EmbedDashboard: React.FC<EmbedProps> = () => {
-  const [dashboardNext, setDashboardNext] = React.useState(true)
-  const [activeFilter, setActiveFilter] = React.useState('')
-  const [activeFilterIndex, setActiveFilterIndex] = React.useState(0)
-  const [running, setRunning] = React.useState(true)
-  const [dashboard, setDashboard] = React.useState<LookerEmbedDashboard>()
-  const extensionContext = useContext<ExtensionContextData>(ExtensionContext)
-  const filters = {0:'Texas',1:'California',2:'Florida',3:'Ohio'}
-
-
-  React.useEffect(() => {
-    var counter = 0
-    const interval = setInterval(() => {
-      counter += 1
-      setActiveFilterIndex((counter)%4)
-    }, 10000);
-    return () => clearInterval(interval);
-  }, []);
-
-  React.useEffect(() => {
-    if (dashboard) {
-      console.log(filters[activeFilterIndex])
-      dashboard.updateFilters({'_carousel':filters[activeFilterIndex]})
-      dashboard.run()
+// ### start surgery
+looker.plugins.visualizations.add({
+  // Id and Label are legacy properties that no longer have any function besides documenting
+  // what the visualization used to have. The properties are now set via the manifest
+  // form within the admin/visualizations page of Looker
+  id: "hello_world",
+  label: "Hello World",
+  options: {
+    font_size: {
+      type: "string",
+      label: "Font Size",
+      values: [
+        {"Large": "large"},
+        {"Small": "small"}
+      ],
+      display: "radio",
+      default: "large"
     }
-  }, [activeFilterIndex]
+  },
+  // Set up the initial state of the visualization
+  create: function(element, config) {
 
-  );
+    // Insert a <style> tag with some styles we'll use later.
+    element.innerHTML = `
+      <style>
+        .hello-world-vis {
+          /* Vertical centering */
+          height: 100%;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          text-align: center;
+        }
+        .hello-world-text-large {
+          font-size: 72px;
+        }
+        .hello-world-text-small {
+          font-size: 18px;
+        }
+      </style>
+    `;
 
+    // Create a container element to let us center the text.
+    var container = element.appendChild(document.createElement("div"));
+    container.className = "hello-world-vis";
 
-  const updateRunButton = (running: boolean) => {
-    setRunning(running)
-  }
+    // Create an element to contain the text.
+    this._textElement = container.appendChild(document.createElement("div"));
 
-  const setupDashboard = (dashboard: LookerEmbedDashboard) => {
-    setDashboard(dashboard)
-  }
+  },
+  // Render in response to the data or settings changing
+  updateAsync: function(data, element, config, queryResponse, details, done) {
 
-  const embedCtrRef = useCallback(el => {
-    const hostUrl = extensionContext?.extensionSDK?.lookerHostData?.hostUrl
-    if (el && hostUrl) {
-      el.innerHTML = ''
-      LookerEmbedSDK.init(hostUrl)
-      const db = LookerEmbedSDK.createDashboardWithId(3)
-      // db.withNext()
-      db.appendTo(el)
-        .build()
-        .connect()
-        .then(setupDashboard)
-        .catch((error: Error) => {
-          console.error('Connection error', error)
-        })
+    // Clear any errors from previous updates
+    this.clearErrors();
+
+    
+    // Throw some errors and exit if the shape of the data isn't what this chart needs
+    if (queryResponse.fields.dimensions.length == 0) {
+      this.addError({title: "No Dimensions", message: "This chart requires dimensions."});
+      return;
     }
-  }, [])
 
-  return (
-    <>
-      <EmbedContainer ref={embedCtrRef}/>
-    </>
-  )
-}
+    // Grab the first cell of the data
+    var firstRow = data[0];
+    var firstCell = firstRow[queryResponse.fields.dimensions[0].name];
+  
+    // Insert the data into the page
+    this._textElement.innerHTML = LookerCharts.Utils.htmlForCell(firstCell);
+
+    // Set the size to the user-selected size
+    if (config.font_size == "small") {
+      this._textElement.className = "hello-world-text-small";
+    } else {
+      this._textElement.className = "hello-world-text-large";
+    }
+
+    // We are done rendering! Let Looker know.
+    done()
+  }
+});
+// ### end surgery
+
