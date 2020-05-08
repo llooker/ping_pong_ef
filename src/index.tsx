@@ -26,6 +26,90 @@ import * as React from "react"
 import * as ReactDOM from "react-dom"
 import { App } from "./App"
 
+document.write(`
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/2.7.4/d3.layout.min.js"></script>
+<style>
+:host {
+  font-family:  inconsolata,Monaco,lucida console,Consolas,courier new;
+  display: inline-block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  zoom: 1.25;
+}
+text {		
+  fill: white;		
+}
+span {
+  top: 46%;
+  left: 55%;
+  transform: translateX(-50%);
+  position: absolute;
+  font-size: 2em;
+  color: white;
+}
+</style>
+<span id="russ">0</span>
+<style>
+body {
+  background-color: purple;
+}
+:host {
+  font-family: inconsolata,Monaco,lucida console,Consolas,courier new;
+  display: inline-block;
+  color: white;
+}
+#header {
+  display: inline-block;
+  position: absolute;
+  top: 10px;
+  left: 20px;
+}
+#latency span {
+  vertical-align: middle;
+  display: inline-block;
+  margin-top: -25px;
+}
+#footer {
+  position: absolute;
+  text-align: left;
+  padding: 10px;
+  font-size: 14px;
+  width: 465px;
+  margin: 0 auto;
+  left: 20px;
+  bottom: 10px;
+}
+#footer ul {
+  padding-left: 20px;
+  list-style-type: decimal;
+}
+#footer li {
+  padding-bottom: 5px;
+  line-height: 15px;
+  list-style-type: none;
+}
+.dot {
+  height: 8px;
+  width: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 10px;
+  border-style:solid;
+  border-width: 2px;
+}
+h1, h3 {
+  font-weight: 400;
+}
+</style>
+`)
+
+import {PingPong} from "./components/Embed/cool"
+
+customElements.define("ping-pong", PingPong);
+
 window.addEventListener("DOMContentLoaded", event => {
   var root = document.createElement("div")
   document.body.appendChild(root)

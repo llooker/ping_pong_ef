@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
- import isEqual from 'lodash/isEqual'
+import isEqual from 'lodash/isEqual'
 import React, { useContext, useEffect, useState } from "react"
 import { useLocation } from 'react-router-dom'
 import { Heading, Box } from "@looker/components"

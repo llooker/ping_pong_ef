@@ -1,18 +1,300 @@
+
+
 // @ts-nocheck
-import React, { useCallback, useContext, useEffect } from "react"
-import { EmbedProps } from "./types"
-import { LookerEmbedSDK, LookerEmbedDashboard } from '@looker/embed-sdk'
-import {
-  ExtensionContext,
-  ExtensionContextData,
-} from "@looker/extension-sdk-react"
-import { Button, Heading, Label, ToggleSwitch } from "@looker/components"
-import { SandboxStatus } from '../SandboxStatus'
-import { EmbedContainer } from './components/EmbedContainer'
+const static_js = {
+  "styles": [
+    {
+      "id": "0",
+      "fill": "rgb(204, 204, 204)"
+    },
+    {
+      "id": "1",
+      "fill": "#198bff"
+    },
+    {
+      "id": "2",
+      "fill": "#d4933f"
+    },
+    {
+      "id": "3",
+      "fill": "#fdb813"
+    },
+    {
+      "id": "4",
+      "fill": "#ff750a"
+    },
+    {
+      "id": "5",
+      "fill": "transparent"
+    },
+    {
+      "id": "aaerror",
+      "stroke": "#FF0000",
+	  "stroke-width":"4px"
+    },
+    {
+      "id": "pderror",
+      "stroke": "#21B400",
+	  "stroke-width":"4px"
+    }
+  ],
+  "valcols": [
+    {
+      "col": "visid"
+    },
+    {
+      "col": "index"
+    },
+    {
+      "col": "error",
+      "val": [
+        {
+          "name": "aa error",
+          "style": "aaerror"
+        },
+        {
+          "name": "pd error",
+          "style": "pderror"
+        }
+      ]
+    },
+    {
+      "col": "style"
+    }
+  ],
+  "act_codes": [
+    {
+      "id": "2",
+      "short": "Logout/Timeout",
+      "desc": "Logout",
+      "styles": {
+        "fill": "rgb(165, 165, 165)"
+      }
+    },
+    {
+      "id": "22",
+      "short": "Campaigns",
+      "desc": "Campaigns",
+      "styles": {
+        "fill": "rgb(165, 165, 165)"
+      }
+    },
+    {
+      "id": "15",
+      "short": "Deals",
+      "desc": "Deals",
+      "styles": {
+        "fill": "rgb(165, 165, 165)"
+      }
+    },
+    {
+      "id": "3",
+      "short": "Recharge",
+      "desc": "Recharge",
+      "styles": {
+        "fill": "rgb(165, 165, 165)"
+      }
+    },
+    {
+      "id": "12",
+      "short": "UPI Management",
+      "desc": "UPI Management",
+      "styles": {
+        "fill": "rgb(165, 165, 165)"
+      }
+    },
+    {
+      "id": "4",
+      "short": "Others",
+      "desc": "Others",
+      "styles": {
+        "fill": "rgb(165, 165, 165)"
+      }
+    },
+    {
+      "id": "9",
+      "short": "FA-UPI",
+      "desc": "Fund Account (UPI)",
+      "styles": {
+        "fill": "rgb(165, 165, 165)"
+      }
+    },
+    {
+      "id": "7",
+      "short": "FT-UPI",
+      "desc": "Fund Transfer (UPI)",
+      "styles": {
+        "fill": "rgb(165, 165, 165)"
+      }
+    },
+    {
+      "id": "5",
+      "short": "FT-MMID/Mobile",
+      "desc": "Fund Transfer (Mobile/MMID)",
+      "styles": {
+        "fill": "rgb(165, 165, 165)"
+      }
+    },
+    {
+      "id": "8",
+      "short": "FT-Account",
+      "desc": "Fund Transfer (Account)",
+      "styles": {
+        "fill": "rgb(165, 165, 165)"
+      }
+    },
+    {
+      "id": "6",
+      "short": "FT-Generic",
+      "desc": "Funds Transfer (Generic)",
+      "styles": {
+        "fill": "rgb(165, 165, 165)"
+      }
+    },
+    {
+      "id": "0",
+      "short": "Dashboard",
+      "desc": "Dashboard",
+      "styles": {
+        "fill": "rgb(165, 165, 165)"
+      }
+    },
+    {
+      "id": "11",
+      "short": "Txn History",
+      "desc": "Transaction History",
+      "styles": {
+        "fill": "rgb(165, 165, 165)"
+      }
+    },
+    {
+      "id": "14",
+      "short": "Bills",
+      "desc": "Bills",
+      "styles": {
+        "fill": "rgb(165, 165, 165)"
+      }
+    },
+    {
+      "id": "19",
+      "short": "Deposit",
+      "desc": "Deposit",
+      "styles": {
+        "fill": "rgb(165, 165, 165)"
+      }
+    },
+    {
+      "id": "10",
+      "short": "Debit Card",
+      "desc": "Debit Card",
+      "styles": {
+        "fill": "rgb(165, 165, 165)"
+      }
+    },
+    {
+      "id": "18",
+      "short": "Personal Loan",
+      "desc": "Personal Loan",
+      "styles": {
+        "fill": "rgb(165, 165, 165)"
+      }
+    },
+    {
+      "id": "20",
+      "short": "Mutual Funds",
+      "desc": "Mutual Funds",
+      "styles": {
+        "fill": "rgb(165, 165, 165)"
+      }
+    },
 
+    {
+      "id": "21",
+      "short": "Insurance",
+      "desc": "Insurance",
+      "styles": {
+        "fill": "rgb(165, 165, 165)"
+      }
+    },
+    {
+      "id": "23",
+      "short": "Profile",
+      "desc": "Profile",
+      "styles": {
+        "fill": "rgb(165, 165, 165)"
+      }
+    },
+    {
+      "id": "13",
+      "short": "Customer Service",
+      "desc": "Customer Service",
+      "styles": {
+        "fill": "rgb(165, 165, 165)"
+      }
+    },
+    {
+      "id": "1",
+      "short": "Global Menu",
+      "desc": "Global Menu",
+      "styles": {
+        "fill": "rgb(165, 165, 165)"
+      }
+    },
+    {
+      "id": "16",
+      "short": "Enter Shop",
+      "desc": "Enter",
+      "coords": {
+        "x": 66,
+        "y": 375,
+        "r": 25
+      },
+      "showTotal": false,
+      "styles": {
+        "fill": "#bbbbbb",
+        "fill-opacity": 0
+      }
+    },
+    {
+      "id": "17",
+      "short": "Exit Shop App",
+      "desc": "Exit Shop App",
+      "coords": {
+        "x": 850,
+        "y": 120,
+        "r": 20
+      },
+      "styles": {
+        "fill": "#75929e",
+        "fill-opacity": 0,
+        "visibility": "hidden"
+      }
+    }
+  ],
+  "legend": [
+    {
+      "style": "0",
+      "description": "represents a Customer on SSS Shop"
+    },
+    {
+      "style": "1",
+      "description": "represents an Prospect Customer on SSS Shop"
+    },    {
+      "style": "4",
+      "description": "represents a FSA Customer on SSS Shop"
+    },
+    {
+      "style": "3",
+      "description": "represents a LSA Customer on SSS Shop"
+    },
+    {
+      "style": "aaerror",
+      "description": "represents struggles due to errors"
+    }
+  ]
+}
 
-class PingPong extends HTMLElement {
-
+export class PingPong extends HTMLElement {
   constructor() {
     super();
     this.element = this.attachShadow({ mode: "open" });
@@ -29,8 +311,8 @@ class PingPong extends HTMLElement {
 
     // in seconds
     this.timer = 0;
-    this.latencyThreshold = 600;
-    this.userActivityDropTime = 120;
+    this.latencyThreshold = 60000;
+    this.userActivityDropTime = 60000;
     this.userActivityMaxAge = 70;
     this.timezoneOffset = 330; // IST in mins
 
@@ -70,31 +352,12 @@ class PingPong extends HTMLElement {
   }
 
   async render(element) {
+
+
+    // console.log(cool)
     const template = document.createElement("template");
     template.innerHTML = `
-      <style>
-        :host {
-          font-family:  inconsolata,Monaco,lucida console,Consolas,courier new;
-          display: inline-block;
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          zoom: 1.25;
-        }
-        text {		
-          fill: white;		
-        }
-        span {
-          top: 46%;
-          left: 55%;
-          transform: translateX(-50%);
-          position: absolute;
-          font-size: 2em;
-          color: white;
-        }
-      </style>
-      <span>0</span>
+
       `;
 
     element.appendChild(template.content.cloneNode(true));
@@ -126,8 +389,8 @@ class PingPong extends HTMLElement {
     this.label = label;
     this.foci = foci;
 
-    this.styles = await service.getStyles();
-    this.valcols = await service.getValcols();
+    this.styles = static_js.styles
+    this.valcols = static_js.valcols
 
     await this.setActivityRadius(); //creates the activity nodes
 
@@ -142,37 +405,45 @@ class PingPong extends HTMLElement {
   }
 
   async startStreaming() {
-    Stream.publish("user_activity", await service.getDaysSimulated());
-    setTimeout(this.startStreaming.bind(this), 10000);
+    // Stream.publish("user_activity", await service.getDaysSimulated());
+    // setTimeout(this.startStreaming.bind(this), 10000);
   }
 
   //------------------------------------------------------------
   //---------- Populates activity with customer nodes ----------
   //------------------------------------------------------------
-  startRecievingData() {
-    Stream.subscribe("user_activity", rows => {
-      if (!rows || rows.length === 0) {
-        // show latency flag if no data for more than 10 mins
-        console.log('no data!')
-        let hasNoData =
-          this.getSecondsFromNow(this.lastDataRecieved) >=
-            this.latencyThreshold && this.enableRealtime;
+  async startRecievingData() {
+    // Stream.subscribe("user_activity", rows => {
+      // if (!rows || rows.length === 0) {
+      //   // show latency flag if no data for more than 10 mins
+      //   console.log('no data!')
+      //   let hasNoData =
+      //     this.getSecondsFromNow(this.lastDataRecieved) >=
+      //       this.latencyThreshold && this.enableRealtime;
 
-        hasNoData ? (this.isDelayed = true) : (this.isDelayed = false);
+      //   hasNoData ? (this.isDelayed = true) : (this.isDelayed = false);
 
-        return;
-      }
+      //   return;
+      // }
 
       // A node for each person's schedule
-      for (let d of rows) {
+      var sdk = this.sdk
+      // console.log(this.sdk)
+      const data = await sdk.ok(sdk.run_look({
+        look_id: 3,
+        result_format: 'json'
+      }))
+      for (let d of data) {
+        d['timestamp'] = new Date(d['mock_data_pp.timestamp']["value"] || d['mock_data_pp.timestamp'])
+        d['value'] = d['mock_data_pp.value']["value"] ||  d['mock_data_pp.value']
         let timestamp = d.timestamp;     
         let diff = Math.abs(this.getDateOffset().getTime() - this.userActivityDropTime * 1000 - this.getDateOffset(d.timestamp).getTime()) /1000
-        console.log('diff',diff)
-        console.log('lastdatareceived',this.lastDataRecieved)
-        console.log('timediff',this.getSecondsFromNow(timestamp))
-        console.log('systime', this.getDateOffset().getTime())
-        console.log('recordtime', this.getDateOffset(timestamp).getTime())
-        console.log('last', this.getSecondsFromNow(this.lastDataRecieved))
+        // console.log('diff',diff)
+        // console.log('lastdatareceived',this.lastDataRecieved)
+        // console.log('timediff',this.getSecondsFromNow(timestamp))
+        // console.log('systime', this.getDateOffset().getTime())
+        // console.log('recordtime', this.getDateOffset(timestamp).getTime())
+        // console.log('last', this.getSecondsFromNow(this.lastDataRecieved))
         this.lastDataRecieved = d.timestamp;
         
         
@@ -217,6 +488,7 @@ class PingPong extends HTMLElement {
           errorStyle: this.getErrors(activity)
         };
         let { act, style, errorStyle } = scheds;
+        console.log(scheds)
         let nodeIndex = this.nodes.findIndex(node => node.id == scheds.id);
         if (nodeIndex >= 0) {
           if (this.nodes[nodeIndex].act != act) {
@@ -240,7 +512,7 @@ class PingPong extends HTMLElement {
           });
         }
       }
-    });
+    // });
   }
 
   processSeconds(timestamp) {
@@ -270,18 +542,18 @@ class PingPong extends HTMLElement {
     console.log('initial prune', this.nodes);
     if (this.nodes.length > 0 && this.nodes !=null) {
         this.nodes.forEach(node => {
-         const { diff } = this.processSeconds(node.age);
-         console.log('moveout',diff)
+          const { diff } = this.processSeconds(node.age);
+          console.log('moveout',diff)
         
           if (diff + 60 >= this.userActivityMaxAge) {
           //if (Math.round(Math.random())) {
-           //console.log(node);
+            //console.log(node);
             this.pruneIds.push(node);
           }
         });
 
         //move nodes to logout/timeout circle position *** max//
-       this.MoveInactive(this.pruneIds);
+        this.MoveInactive(this.pruneIds);
         
         if (this.pruneIds.length > 0) {
           this.updateTotals();
@@ -577,8 +849,8 @@ class PingPong extends HTMLElement {
       })
     );
 
-    if (this.element.querySelector("span").innerHTML != this.total) {
-      this.element.querySelector("span").innerHTML = this.total;
+    if (document.getElementById("russ").innerHTML != this.total) {
+      document.getElementById("russ").innerHTML = this.total;
     }
 
     // Update percentages
@@ -616,7 +888,7 @@ class PingPong extends HTMLElement {
     );
 
     // if greater than 10 mins || 600 seconds show latency
-    if (this.isDelayed && lastDataRecieved !== "") {
+    if (this.isDelayed && this.lastDataRecieved !== "") {
       this.element.dispatchEvent(
         new CustomEvent("pingpong.latency", {
           bubbles: true,
@@ -695,7 +967,7 @@ class PingPong extends HTMLElement {
   //---------------------------------------------------------------------
   async setActivityCoordinates() {
     //generates coordinates for each feature
-    let act_codes = await service.getActCodes();
+    let act_codes = static_js.act_codes
 
     this.act_counts = new Array(act_codes.length).fill(0);
 
@@ -807,68 +1079,134 @@ class PingPong extends HTMLElement {
     await this.render(this.element);
   }
 }
-customElements.define('ping-pong', PingPong);
 
 
+// customElements.define("ping-pong", PingPong);
 
-export const EmbedDashboard: React.FC<EmbedProps> = () => {
-  const [dashboardNext, setDashboardNext] = React.useState(true)
-  const [activeFilter, setActiveFilter] = React.useState('')
-  const [activeFilterIndex, setActiveFilterIndex] = React.useState(0)
-  const [running, setRunning] = React.useState(true)
-  const [dashboard, setDashboard] = React.useState<LookerEmbedDashboard>()
-  const extensionContext = useContext<ExtensionContextData>(ExtensionContext)
-  const filters = {0:'Texas',1:'California',2:'Florida',3:'Ohio'}
+// looker.plugins.visualizations.add({
+//   // Id and Label are legacy properties that no longer have any function besides documenting
+//   // what the visualization used to have. The properties are now set via the manifest
+//   // form within the admin/visualizations page of Looker
+//   id: "hello_world",
+//   label: "Hello World",
+//   // Set up the initial state of the visualization
+//   create: function(element, config) {
+//     const legends = static_js.legend
+//     const styles = static_js.styles
+//     const template = document.createElement("template");
+//     template.innerHTML = `
+        // <style>
+        //   body {
+        //     background-color: purple;
+        //   }
+        //   :host {
+        //     font-family: inconsolata,Monaco,lucida console,Consolas,courier new;
+        //     display: inline-block;
+        //     color: white;
+        //   }
+        //   #header {
+        //     display: inline-block;
+        //     position: absolute;
+        //     top: 10px;
+        //     left: 20px;
+        //   }
+        //   #latency span {
+        //     vertical-align: middle;
+        //     display: inline-block;
+        //     margin-top: -25px;
+        //   }
+        //   #footer {
+        //     position: absolute;
+        //     text-align: left;
+        //     padding: 10px;
+        //     font-size: 14px;
+        //     width: 465px;
+        //     margin: 0 auto;
+        //     left: 20px;
+        //     bottom: 10px;
+        //   }
+        //   #footer ul {
+        //     padding-left: 20px;
+        //     list-style-type: decimal;
+        //   }
+        //   #footer li {
+        //     padding-bottom: 5px;
+        //     line-height: 15px;
+        //     list-style-type: none;
+        //   }
+        //   .dot {
+        //     height: 8px;
+        //     width: 8px;
+        //     border-radius: 50%;
+        //     display: inline-block;
+        //     margin-right: 10px;
+        //     border-style:solid;
+        //     border-width: 2px;
+        //   }
+        //   h1, h3 {
+        //     font-weight: 400;
+        //   }
+        // </style>
+//         <div id="main-wrapper">
+//             <div id="header">
+//                 <h1 id="current-time">00:00:00xx</h1>
+//                 <h2 id="time-zone">(IST)</h2>
+//                 <h3>
+//                     Customer Activity Movement (CAM)<br>
+//                     a.k.a. Ping-Pong Chart
+//                 </h3>
+//                 <div id="latency">
+//                   <svg height="32px" version="1.1" viewBox="0 0 32 32" width="32px" xmlns="http://www.w3.org/2000/svg">
+//                       <g fill="none" fill-rule="evenodd" stroke="none" stroke-width="1">
+//                           <g fill="#FF0000" id="101 Warning">
+//                               <path d="M14.4242327,6.14839275 C15.2942987,4.74072976 16.707028,4.74408442 17.5750205,6.14839275 L28.3601099,23.59738 C29.5216388,25.4765951 28.6755462,27 26.4714068,27 L5.5278464,27 C3.32321557,27 2.47386317,25.4826642 3.63914331,23.59738 Z M16,20 C16.5522847,20 17,19.5469637 17,19.0029699 L17,12.9970301 C17,12.4463856 16.5561352,12 16,12 C15.4477153,12 15,12.4530363 15,12.9970301 L15,19.0029699 C15,19.5536144 15.4438648,20 16,20 Z M16,24 C16.5522848,24 17,23.5522848 17,23 C17,22.4477152 16.5522848,22 16,22 C15.4477152,22 15,22.4477152 15,23 C15,23.5522848 15.4477152,24 16,24 Z M16,24" id="Triangle 29" />
+//                           </g>
+//                       </g>
+//                   </svg>
+//                   <span id="latency-time">12:00:00pm</span>
+//                 </div>
+//             </div>
+//             <div id="footer">
+//               <p>Legend:</p>
+//               <ul>
+//               ${legends
+//                 .map(legend => {
+//                   const style = styles.find(
+//                     style => style.id == legend.style
+//                   );
+//                   return `
+//                 <li>
+//                   <span class="dot" style="background:${
+//                     style.fill
+//                   };border-color:${style.stroke || "transparent"};"></span>
+//                     ${legend.description}
+//                   </li>
+//               `;
+//                 })
+//                 .join(" ")}
+//               </ul>
+//             </div>
+//           <ping-pong></ping-pong>
+//         </div>
+//       `;
+    
+//     element.appendChild(template)
+//     element.appendChild(template.content.cloneNode(true));
+//     // Create a container element to let us center the text.
+//     // container.appendChild(PingPong)
 
 
-  React.useEffect(() => {
-    var counter = 0
-    const interval = setInterval(() => {
-      counter += 1
-      setActiveFilterIndex((counter)%4)
-    }, 10000);
-    return () => clearInterval(interval);
-  }, []);
+//   },
+//   // Render in response to the data or settings changing
+//   updateAsync: function(data, element, config, queryResponse, details, done) {
+//     // element.innerHTML = ""
+//     // element.appendChild(document.createElement("ping-pong"));
+//     // Clear any errors from previous updates
+//     this.clearErrors();
 
-  React.useEffect(() => {
-    if (dashboard) {
-      console.log(filters[activeFilterIndex])
-      dashboard.updateFilters({'_carousel':filters[activeFilterIndex]})
-      dashboard.run()
-    }
-  }, [activeFilterIndex]
+//     console.log(data)
 
-  );
-
-
-  const updateRunButton = (running: boolean) => {
-    setRunning(running)
-  }
-
-  const setupDashboard = (dashboard: LookerEmbedDashboard) => {
-    setDashboard(dashboard)
-  }
-
-  const embedCtrRef = useCallback(el => {
-    const hostUrl = extensionContext?.extensionSDK?.lookerHostData?.hostUrl
-    if (el && hostUrl) {
-      el.innerHTML = ''
-      LookerEmbedSDK.init(hostUrl)
-      const db = LookerEmbedSDK.createDashboardWithId(3)
-      // db.withNext()
-      db.appendTo(el)
-        .build()
-        .connect()
-        .then(setupDashboard)
-        .catch((error: Error) => {
-          console.error('Connection error', error)
-        })
-    }
-  }, [])
-
-  return (
-    <>
-      <EmbedContainer ref={embedCtrRef}/>
-    </>
-  )
-}
+//     // We are done rendering! Let Looker know.
+//     done()
+//   }
+// });
